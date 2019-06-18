@@ -1,7 +1,5 @@
-class Location < ActiveRecord::Base
-  has_many :restaurants
-  has_many :users
-  
+class Location
+
   attr_reader :city
 
   def initialize(city)
