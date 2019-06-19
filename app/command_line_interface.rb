@@ -18,23 +18,6 @@ class CommandLineInterface
     @long = json_data['longt']
   end
 
-  # def User.new_user?
-  #   puts "Have you used this app before? (y/n)"
-  #   answer = STDIN.gets.chomp
-  #   if answer.downcase == "y"
-  #     puts "Enter your username"
-  #     my_un = STDIN.gets.chomp
-  #     User.find_user(my_un)
-  #   else
-  #     User.create_user
-  #   end
-  # end
-
-  # def User.find_user(un)
-  #   un = STDIN.gets.chomp
-  #   User.find_by(username: un)
-  # end
-
   def User.create_user
     user_data = []
 
