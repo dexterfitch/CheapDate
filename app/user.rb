@@ -1,5 +1,5 @@
-class User< ActiveRecord::Base
-  belongs_to :location
+class User < ActiveRecord::Base
+  belongs_to :restaurants_users
   has_many :restaurants, through: :list
 
   require 'rest-client'
@@ -15,7 +15,6 @@ class User< ActiveRecord::Base
     @city = city
     @lat = lat
     @long = long
-    @@all << self
   end
 
   def self.get_lat(json_data)
