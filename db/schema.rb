@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190619004920) do
+ActiveRecord::Schema.define(version: 2019_06_19_004920) do
 
   create_table "lists", force: :cascade do |t|
     t.integer "user_id"
@@ -18,12 +18,12 @@ ActiveRecord::Schema.define(version: 20190619004920) do
   end
 
   create_table "restaurants", force: :cascade do |t|
-    t.string  "name"
-    t.string  "street_address"
-    t.string  "city"
-    t.string  "phone"
-    t.string  "menu"
-    t.string  "rating"
+    t.string "name"
+    t.string "street_address"
+    t.string "city"
+    t.string "phone"
+    t.string "menu"
+    t.string "rating"
     t.boolean "deliveryTF"
     t.boolean "couponTF"
   end
@@ -34,10 +34,10 @@ ActiveRecord::Schema.define(version: 20190619004920) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string  "username"
-    t.string  "name"
-    t.string  "street"
-    t.string  "city"
+    t.string "username"
+    t.string "name"
+    t.string "street"
+    t.string "city"
     t.decimal "lat"
     t.decimal "long"
   end
