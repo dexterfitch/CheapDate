@@ -1,8 +1,9 @@
-class User
+class User< ActiveRecord::Base
+  belongs_to :location
+  has_many :restaurants, through: :list
+
   require 'rest-client'
   require 'pry'
-
-  @@all = []
 
   attr_reader :username
   attr_accessor :name, :street, :city, :lat, :long
@@ -44,7 +45,6 @@ class User
     user_data << User.get_lat(json)
     user_data << User.get_long(json)
 
-    # User.new(user_data[0], user_data[1], user_data[2], user_data[3], user_data[4], user_data[5])
     User.new(user_data[0], user_data[1], user_data[2], user_data[3], user_data[4], user_data[5])
   end
 
