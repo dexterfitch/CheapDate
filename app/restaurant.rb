@@ -21,18 +21,8 @@ class Restaurant < ActiveRecord::Base
   @@cheap_eats = @@restaurants.select { |restaurant| restaurant["restaurant"]["average_cost_for_two"] <= 30 }
   # JSON Data pull end
 
-  attr_accessor :name, :street_address, :city, :phone, :menu, :rating, :deliveryTF, :couponTF
 
-  def initialize(name, street_address, city, phone, menu, rating, deliveryTF, couponTF)
-    @name = name
-    @street_address = street_address
-    @city = city
-    @phone = phone
-    @menu = menu
-    @rating = rating
-    @deliveryTF = deliveryTF
-    @couponTF = couponTF
-  end
+  
 
   # def self.get_restaurant
   #   i = 0
