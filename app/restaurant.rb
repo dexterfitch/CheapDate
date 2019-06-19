@@ -34,32 +34,32 @@ class Restaurant < ActiveRecord::Base
     @couponTF = couponTF
   end
 
-  def self.get_restaurant
-    i = 0
+  # def self.get_restaurant
+  #   i = 0
 
-    for each in @@cheap_eats
-      restaurant_data = []
-      restaurant_data << @@cheap_eats[i]["restaurant"]["name"]
-      restaurant_data << (@@cheap_eats[i]["restaurant"]["location"]["address"])[0...-6]
-      restaurant_data << @@cheap_eats[i]["restaurant"]["location"]["city"]
-      restaurant_data << @@cheap_eats[i]["restaurant"]["phone_numbers"]
-      restaurant_data << @@cheap_eats[i]["restaurant"]["menu_url"]
-      restaurant_data << @@cheap_eats[i]["restaurant"]["user_rating"]["aggregate_rating"]
-      if @@cheap_eats[i]["restaurant"]["has_online_delivery"] == 0
-        restaurant_data << false
-      else
-        restaurant_data << true
-      end
-      restaurant_data << @@cheap_eats[i]["restaurant"]["include_bogo_offers"]
+  #   for each in @@cheap_eats
+  #     restaurant_data = []
+  #     restaurant_data << @@cheap_eats[i]["restaurant"]["name"]
+  #     restaurant_data << (@@cheap_eats[i]["restaurant"]["location"]["address"])[0...-6]
+  #     restaurant_data << @@cheap_eats[i]["restaurant"]["location"]["city"]
+  #     restaurant_data << @@cheap_eats[i]["restaurant"]["phone_numbers"]
+  #     restaurant_data << @@cheap_eats[i]["restaurant"]["menu_url"]
+  #     restaurant_data << @@cheap_eats[i]["restaurant"]["user_rating"]["aggregate_rating"]
+  #     if @@cheap_eats[i]["restaurant"]["has_online_delivery"] == 0
+  #       restaurant_data << false
+  #     else
+  #       restaurant_data << true
+  #     end
+  #     restaurant_data << @@cheap_eats[i]["restaurant"]["include_bogo_offers"]
 
-      new_restaurant = Restaurant.new(restaurant_data[0], restaurant_data[1], restaurant_data[2], restaurant_data[3], restaurant_data[4], restaurant_data[5], restaurant_data[6], restaurant_data[7])
-      new_restaurant.save
+  #     new_restaurant = Restaurant.new(restaurant_data[0], restaurant_data[1], restaurant_data[2], restaurant_data[3], restaurant_data[4], restaurant_data[5], restaurant_data[6], restaurant_data[7])
+  #     new_restaurant.save
 
-      i+= 1
-    end
-  end
+  #     i+= 1
+  #   end
+  # end
 
-  Restaurant.get_restaurant
+  # Restaurant.get_restaurant
 end
 
 
