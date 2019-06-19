@@ -1,7 +1,8 @@
 require_relative '../config/environment'
-# require_relative '../app'
 
 
 
-puts "HELLO WORLD"
-binding.pry
+
+#puts "HELLO WORLD"
+lets_go = CommandLineInterface.new
+lets_go.find_a_cheap_date
