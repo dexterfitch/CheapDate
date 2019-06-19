@@ -1,6 +1,6 @@
 class Restaurant < ActiveRecord::Base
-  belongs_to :location
-  has_one :user, through: :list
+  belongs_to :restaurants_users
+  has_many :restaurants, through: :list
 
   require 'rest-client'
   require 'pry'
