@@ -1,8 +1,12 @@
 require_relative '../config/environment'
 
-
-
-
-#puts "HELLO WORLD"
 lets_go = CommandLineInterface.new
 lets_go.find_a_cheap_date
+
+
+User.create_user
+
+puts "Collecting your nearby restaurants..."
+
+Restaurant.pull_restaurant_json
+Restaurant.get_restaurant

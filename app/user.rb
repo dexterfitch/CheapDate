@@ -2,9 +2,7 @@ require 'rest-client'
 require 'pry'
 
 class User < ActiveRecord::Base
-  belongs_to :restaurants_users
-  has_many :restaurants, through: :list
-
+  has_many :restaurants, through: :restaurants_users
 
 # Instance Methods
 
