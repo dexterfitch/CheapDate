@@ -71,15 +71,9 @@ class CommandLineInterface
       restaurant_data << @@cheap_eats[i]["restaurant"]["phone_numbers"]
       restaurant_data << @@cheap_eats[i]["restaurant"]["menu_url"]
       restaurant_data << @@cheap_eats[i]["restaurant"]["user_rating"]["aggregate_rating"]
-      if @@cheap_eats[i]["restaurant"]["has_online_delivery"] == 0
-        restaurant_data << false
-      else
-        restaurant_data << true
-      end
-      restaurant_data << @@cheap_eats[i]["restaurant"]["include_bogo_offers"]
       restaurant_data << @@cheap_eats[i]["restaurant"]["cuisines"]
 
-      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], deliveryTF: restaurant_data[6], couponTF: restaurant_data[7], cuisines: restaurant_data[8])
+      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], cuisines: restaurant_data[6])
 
       i+= 1
     end
@@ -91,65 +85,109 @@ class CommandLineInterface
     }
   end
 
-  def Restaurant.your_cheap_eats
+  def Restaurant.cheap_eats
     while true
-      puts "What would you like to do now? (List? Help, Exit etc..)"
+      puts "What would you like to do now?\n(Options: List, Cuisine, Sort, Exit, Help)"
       answer = STDIN.gets.chomp
       answer = answer.downcase
       case answer
       when "list"
-        Restaurant.list_your_eats
+        Restaurant.list_my_eats
       when "cuisine"
         Restaurant.list_cuisines
-      when "delivery"
-        Restaurant.will_deliver
-      when "coupons"
-        Restaurant.has_coupons
-      when "name sort"
-        Restaurant.sort_your_eats_by_name
+      when "sort"
+        Restaurant.sort_my_eats_by_name
       when "help"
-        puts "Commands:\n > List - Will list all your local Cheap Eats.\n > Cuisine - Will list available cuisines.\n > Name Sort - Will sort your list by name.\n > Delivery - Will list all restaurants offering delivery.\n > Coupons - Will list all restaurants with special offers.\n > Exit - Close the app."
+        puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list available cuisines, and let you select one to filter results. \n > Sort - Will sort your list by name. \n > Exit - Close the app."
       when "exit"
-        puts "Bye!"
+        puts "\n\nBye! Bon appetit!\n\n"
         break
       end
     end
   end
 
-  def Restaurant.list_your_eats
-    my_cheap_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
-    my_cheap_eats.each do |cheap_eat|
-      this_eat = Restaurant.find(cheap_eat.restaurant_id)
-      puts "\n\nName: #{this_eat.name}\nAddress: #{this_eat.street_address}\nPhone Number: #{this_eat.phone}\nMenu: #{this_eat.menu}\nCuisines: #{this_eat.cuisines}\nRating: #{this_eat.rating} | Delivery: #{this_eat.deliveryTF} | Coupons: #{this_eat.couponTF}"
+  def Restaurant.my_local_cheap_eats
+    collection = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
+    Restaurant.collect_my_eats(collection)
+  end
+
+  def Restaurant.collect_my_eats(restaurant_collection)
+    collected_eats = []
+    restaurant_collection.each do |cheap_eat|
+      collected_eats << Restaurant.find(cheap_eat.restaurant_id)
+    end
+    collected_eats
+  end
+
+  def Restaurant.print_my_eats(restaurant_array)
+    restaurant_array.each do |cheap_eat|
+      puts "\nName: #{cheap_eat.name}\nAddress: #{cheap_eat.street_address}\nPhone Number: #{cheap_eat.phone}\nMenu: #{cheap_eat.menu}\nCuisine: #{cheap_eat.cuisines}\nRating: #{cheap_eat.rating}\n"
     end
   end
 
-  def Restaurant.sort_your_eats_by_name
-    presorted_eats = []
-    sorted_eats = []
-    my_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
-    my_eats.each do |eat|
-      eat = Restaurant.find(eat.restaurant_id)
-      presorted_eats << eat
-    end
-    sorted_eats = presorted_eats.sort_by { |k| k[:name].downcase }
-    sorted_eats.each do |this_eat|
-      puts "\n\nName: #{this_eat.name}\nAddress: #{this_eat.street_address}\nPhone Number: #{this_eat.phone}\nMenu: #{this_eat.menu}\nCuisines: #{this_eat.cuisines}\nRating: #{this_eat.rating} | Delivery: #{this_eat.deliveryTF} | Coupons: #{this_eat.couponTF}"
-    end
+  def Restaurant.list_my_eats
+    collected_eats = Restaurant.my_local_cheap_eats
+    Restaurant.print_my_eats(collected_eats)
   end
 
-  def Restaurant.list_cuisines
-    my_cuisine_choices = []
-    my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
-    my_available_restaurants.each do |restaurant_option|
-      this_cuisine_choice = Restaurant.find(restaurant_option.restaurant_id)
-      my_cuisine_choices << this_cuisine_choice.cuisines
-    end
-    puts my_cuisine_choices.uniq
+  def Restaurant.sort_my_eats_by_name
+    collected_eats = Restaurant.my_local_cheap_eats
+    sorted_eats = collected_eats.sort_by { |k| k[:name].downcase }
+    Restaurant.print_my_eats(sorted_eats)
   end
 
+  def Restaurant.gather_cuisines
+    cuisine_choices = []
+    collected_eats = Restaurant.my_local_cheap_eats
+    collected_eats.each do |cheap_eat|
+      cuisine_choices << cheap_eat.cuisines
+    end
+    cuisine_choices.uniq
+  end
 
-
+  def Restaurant.normalizew_cuisines
+    cuisine_types = [
+      "American",
+      "Asian Fusion",
+      "Bakery",
+      "BBQ",
+      "Bubble/Boba Tea",
+      "Burgers",
+      "Cafe",
+      "Chinese",
+      "Deli",
+      "Desserts",
+      "Dim Sum",
+      "Diner",
+      "Donuts",
+      "Drinks",
+      "Fast Food",
+      "Filipino",
+      "French",
+      "Frozen Yogurt",
+      "Greek",
+      "Hawaiian",
+      "Healthy",
+      "Ice Cream",
+      "Indian",
+      "Italian",
+      "Japanese",
+      "Korean",
+      "Latin American",
+      "Pakistani",
+      "Pizza",
+      "Pub",
+      "Mexican",
+      "Sandwiches",
+      "Seafood",
+      "Sushi",
+      "Tex-Mex",
+      "Thai",
+      "Vegetarian",
+      "Vietnamese"
+    ]
+    cuisine_choices = Restaurant.gather_cuisines
+    cuisine_choices
 end
 
 
@@ -172,8 +210,8 @@ end
 
   # def Restaurant.filter_cuisines(choice)
   #   offers_my_choice = []
-  #   my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id}
-  #   my_available_restaurants.each do |restaurant_option|
+  #   my_cheap_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id}
+  #   my_cheap_eats.each do |restaurant_option|
   #     offers_the_cuisine = Restaurant.find(restaurant_option.restaurant_id) 
   #     offers_my_choice << offers_the_cuisine
   #   end
