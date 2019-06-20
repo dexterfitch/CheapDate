@@ -10,4 +10,4 @@ puts "\n\n\nCollecting your nearby restaurants...\n\n\n"
 Restaurant.pull_restaurant_json
 Restaurant.get_restaurant
 Restaurant.join_users
-Restaurant.your_cheap_eats
+Restaurant.cheap_eats
