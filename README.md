@@ -6,7 +6,7 @@
 
 ## Getting Started
 1. Clone this repo onto your computer locally
-2. Navigate into the local repo via Terminal
+2. Navigate into the local repo folder via Terminal
 3. Run "bundle install" - if you don't have Bundler, run `gem install bundler` first
 4. Get the database going with `rake db:migrate`
 5. Next, run `ruby bin/run.rb`
