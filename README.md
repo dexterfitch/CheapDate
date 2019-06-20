@@ -1,7 +1,7 @@
 # Cheap Date
 
 Sort and save restaurants where Meals for Two are always under $30.
-======
+------
 
 ## Getting Started
 1. Clone this repo onto your computer locally
