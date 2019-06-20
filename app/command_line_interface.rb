@@ -22,21 +22,21 @@ class CommandLineInterface
       if User.find_by(username: answer) == nil
         puts "\n\nUsername does not exist 🙁 Let's create an account!"
         User.create_user
-        puts "\n\n\nCollecting your nearby restaurants...\n\n\n"
+        puts "\n\n\nCollecting your nearby restaurants...  🍽\n\n\n"
         Restaurant.pull_restaurant_json
         Restaurant.get_restaurant
         Restaurant.join_users
         Restaurant.cheap_eats
       else
         $current_user = User.find_by(username: answer)
-        puts "\n\n\nWelcome back, #{$current_user.username}"
-        puts "\n\n\nCollecting your nearby restaurants...\n\n\n"
+        puts "\n\n\nWelcome back, #{$current_user.name}"
+        puts "\n\n\nCollecting your nearby restaurants...  🍽\n\n\n"
         Restaurant.cheap_eats
       end
     when "n"
       puts "Let's set up your account!\n\n\n"
       User.create_user
-      puts "\n\n\nCollecting your nearby restaurants...\n\n\n"
+      puts "\n\n\nCollecting your nearby restaurants...  🍽\n\n\n"
       Restaurant.pull_restaurant_json
       Restaurant.get_restaurant
       Restaurant.join_users
@@ -71,23 +71,20 @@ class CommandLineInterface
   end
 
   def User.access_account
-    while true
-      puts "\n\nModify your account?\n(Name, Address, Delete, Return, Help)"
-      answer = STDIN.gets.chomp
-      answer = answer.downcase
-      case answer
-      when "name"
-        User.edit_name
-      when "address"
-        User.edit_address
-      when "delete"
-        User.delete_account
-        break
-      when "help"
-        puts "Commands:\n > Name - Edit your name.\n > Address - Edit your address.\n > Delete - Delete your CheapDate account.\n > Return - Back to the Main Menu."
-      when "return"
-        Restaurant.cheap_eats
-      end
+    puts "\n\nModify your account?\n(Name, Address, Delete, Return, Help)"
+    answer = STDIN.gets.chomp
+    answer = answer.downcase
+    case answer
+    when "name"
+      User.edit_name
+    when "address"
+      User.edit_address
+    when "delete"
+      User.delete_account
+    when "help"
+      puts "Commands:\n > Name - Edit your name.\n > Address - Edit your address.\n > Delete - Delete your CheapDate account.\n > Return - Back to the Main Menu."
+    when "return"
+      Restaurant.cheap_eats
     end
   end
 
@@ -129,6 +126,7 @@ class CommandLineInterface
     answer = STDIN.gets.chomp
     User.where(:username => answer).destroy_all
     puts "\n\nWe're sorry to see you go. Remember, you can always rejoin us and create a new account!"
+    exit
   end
 
   def User.get_lat(json_data)
@@ -200,7 +198,7 @@ class CommandLineInterface
         puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list & filter available cuisines. \n > Sort - Will sort your list by name. \n > Account - Edit your account information.\n > Exit - Close the app."
       when "exit"
         puts "\n\nBye! Bon appetit!\n\n"
-        break
+        exit
       end
     end
   end
@@ -220,7 +218,7 @@ class CommandLineInterface
 
   def Restaurant.print_my_eats(restaurant_array)
     restaurant_array.each do |cheap_eat|
-      puts "\nName: #{cheap_eat.name}\nAddress: #{cheap_eat.street_address}\nPhone Number: #{cheap_eat.phone}\nMenu: #{cheap_eat.menu}\nCuisine: #{cheap_eat.cuisines}\nRating: #{cheap_eat.rating}\n"
+      puts "\n🥣\nName: #{cheap_eat.name}\nAddress: #{cheap_eat.street_address}\nPhone Number: #{cheap_eat.phone}\nMenu: #{cheap_eat.menu}\nCuisine: #{cheap_eat.cuisines}\nRating: #{cheap_eat.rating}\n"
     end
   end
 
