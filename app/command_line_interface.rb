@@ -73,7 +73,7 @@ class CommandLineInterface
       restaurant_data << @@cheap_eats[i]["restaurant"]["user_rating"]["aggregate_rating"]
       restaurant_data << @@cheap_eats[i]["restaurant"]["cuisines"]
 
-      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], cuisines: restaurant_data[6], normalized_cuisines: "")
+      Restaurant.where(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], cuisines: restaurant_data[6], normalized_cuisines: "").first_or_create
 
       i+= 1
     end
@@ -145,8 +145,14 @@ class CommandLineInterface
     collected_eats.each do |cheap_eat|
       cuisine_choices.concat(cheap_eat[:normalized_cuisines])
     end
-    unique_cuisine_choices = cuisine_choices.split(", ")
-    binding.pry
+    array_cuisine_choices = cuisine_choices.split(", ")
+    unique_cuisine_choices = array_cuisine_choices.uniq.sort
+    puts "\n\nYour local cuisine options:\n\n"
+    puts unique_cuisine_choices
+    puts "\n\nEnter the cuisine you would like:\n\n"
+    chosen_cuisine = STDIN.gets.chomp
+    chosen_cuisine_results = Restaurant.my_local_cheap_eats.select { |restaurant| restaurant[:normalized_cuisines].downcase.include? chosen_cuisine.downcase }
+    Restaurant.print_my_eats(chosen_cuisine_results)
   end
 
   def Restaurant.normalize_cuisines
@@ -161,15 +167,15 @@ class CommandLineInterface
         nca.concat("Asian Fusion, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "bakery"
+      if (cheap_eat[:cuisines].downcase.include? "bakery") || (cheap_eat[:cuisines].downcase.include? "pastry") || (cheap_eat[:cuisines].downcase.include? "pastries")
         nca.concat("Bakery, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "bbq" || cheap_eat[:cuisines].downcase.include? "barbeque" || cheap_eat[:cuisines].downcase.include? "bar-b-q" || cheap_eat[:cuisines].downcase.include? "barbecue" || cheap_eat[:cuisines].downcase.include? "b-b-q"
+      if (cheap_eat[:cuisines].downcase.include? "bbq") || (cheap_eat[:cuisines].downcase.include? "barbeque") || (cheap_eat[:cuisines].downcase.include? "bar-b-q") || (cheap_eat[:cuisines].downcase.include? "barbecue") || (cheap_eat[:cuisines].downcase.include? "b-b-q")
         nca.concat("BBQ, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "bubble" || cheap_eat[:cuisines].downcase.include? "boba"
+      if (cheap_eat[:cuisines].downcase.include? "bubble") || (cheap_eat[:cuisines].downcase.include? "boba")
         nca.concat("Bubble/Boba Tea, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -177,7 +183,7 @@ class CommandLineInterface
         nca.concat("Burgers, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "cafe" || cheap_eat[:cuisines].downcase.include? "coffee" || cheap_eat[:cuisines].downcase.include? "tea"
+      if (cheap_eat[:cuisines].downcase.include? "cafe") || (cheap_eat[:cuisines].downcase.include? "coffee") || (cheap_eat[:cuisines].downcase.include? "tea")
         nca.concat("Cafe, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -205,7 +211,7 @@ class CommandLineInterface
         nca.concat("Donuts, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "drink" || cheap_eat[:cuisines].downcase.include? "beverage" || cheap_eat[:cuisines].downcase.include? "juice"
+      if (cheap_eat[:cuisines].downcase.include? "drink") || (cheap_eat[:cuisines].downcase.include? "beverage") || (cheap_eat[:cuisines].downcase.include? "juice")
         nca.concat("Drinks, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -237,7 +243,7 @@ class CommandLineInterface
         nca.concat("Healthy, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "ice cream" || "gelato"
+      if (cheap_eat[:cuisines].downcase.include? "ice cream") || (cheap_eat[:cuisines].downcase.include? "gelato")
         nca.concat("Ice Cream, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -273,7 +279,7 @@ class CommandLineInterface
         nca.concat("Pizza, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "pub" || "bar"
+      if (cheap_eat[:cuisines].downcase.include? "pub") || (cheap_eat[:cuisines].downcase.include? "bar")
         nca.concat("Pub, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -281,7 +287,7 @@ class CommandLineInterface
         nca.concat("Mexican, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "sandwich" || "sub" || "wrap"
+      if (cheap_eat[:cuisines].downcase.include? "sandwich") || (cheap_eat[:cuisines].downcase.include? "sub") || (cheap_eat[:cuisines].downcase.include? "wrap")
         nca.concat("Sandwiches, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -289,7 +295,7 @@ class CommandLineInterface
         nca.concat("Seafood, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "sushi" || "sashimi"
+      if (cheap_eat[:cuisines].downcase.include? "sushi") || (cheap_eat[:cuisines].downcase.include? "sashimi")
         nca.concat("Sushi, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -301,7 +307,7 @@ class CommandLineInterface
         nca.concat("Thai, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "vegetarian" || "vegan" || "salad"
+      if (cheap_eat[:cuisines].downcase.include? "vegetarian") || (cheap_eat[:cuisines].downcase.include? "vegan") || (cheap_eat[:cuisines].downcase.include? "salad")
         nca.concat("Vegetarian, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -311,4 +317,5 @@ class CommandLineInterface
       end
     end
   end
+
 end
