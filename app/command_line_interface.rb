@@ -87,7 +87,7 @@ class CommandLineInterface
 
   def Restaurant.cheap_eats
     while true
-      puts "What would you like to do now?\n(Options: List, Cuisine, Sort, Exit, Help)"
+      puts "What would you like to do now?\n(Options: List, Cuisine, Sort, Account, Exit, Help)"
       answer = STDIN.gets.chomp
       answer = answer.downcase
       case answer
@@ -97,8 +97,10 @@ class CommandLineInterface
         Restaurant.list_cuisines
       when "sort"
         Restaurant.sort_my_eats_by_name
+      when "account"
+        User.access_account
       when "help"
-        puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list available cuisines, and let you select one to filter results. \n > Sort - Will sort your list by name. \n > Exit - Close the app."
+        puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list available cuisines, and let you select one to filter results. \n > Sort - Will sort your list by name. \n > Account - Edit your account information.\n > Exit - Close the app."
       when "exit"
         puts "\n\nBye! Bon appetit!\n\n"
         break
@@ -188,6 +190,76 @@ class CommandLineInterface
     ]
     cuisine_choices = Restaurant.gather_cuisines
     cuisine_choices
+  end
+
+
+
+
+
+# USER METHODS
+
+  def User.access_account
+      puts "What would you like to do? (type Help for a list of possible commands)"
+      answer = STDIN.gets.chomp
+      answer = answer.downcase
+      case answer
+      when "name"
+        User.edit_name
+        Restaurant.cheap_eats
+      when "address"
+        User.edit_address
+        Restaurant.cheap_eats
+      when "delete"
+        User.delete_account
+      when "help"
+        puts "Commands:\n > Name - Edit your name.\n > Address - Edit your address.\n > Delete - Delete your CheapDate account.\n > Return - Back to the Main Menu."
+      
+      end
+
+
+
+  end
+
+  def User.edit_name
+    puts "The address currently associated with you account is:\n #{$current_user.name}.\n Would you like to change it? (y/n)"
+      answer = STDIN.gets.chomp
+      answer = answer.downcase
+      case answer
+      when "y"
+        puts "Please type the name you would like associated with your account."
+        answer = STDIN.gets.chomp
+        $current_user.update(name: answer)
+        puts "\nThank you. Your name has been successfully updated to: #{$current_user.name}\n\n\n\n"
+      when "n"
+        Restaurant.cheap_eats
+      end
+  end
+
+  def User.edit_address
+    puts "The address currently associated with you account is:\n #{$current_user.street}, #{$current_user.city}.\n Would you like to change it? (y/n)"
+      answer = STDIN.gets.chomp
+      answer = answer.downcase
+      case answer
+      when "y" 
+        puts "Please enter the street address you'd like to associate with your account: "
+        answer = STDIN.gets.chomp
+        $current_user.update(street: answer)
+        puts "Please enter the city you'd like to associate with your account:"
+        answer = STDIN.gets.chomp
+        $current_user.update(city: answer)
+        puts "Thank you, your account has been updated. Your address is:\n #{$current_user.street}, #{$current_user.city}"
+      when "n"
+        Restaurant.cheap_eats
+      end
+  end
+
+  def User.delete_account
+    puts "Please enter your username to delete your account."
+    answer = STDIN.gets.chomp
+    User.where(:username => answer).destroy_all
+    puts "We're sorry to see you go. Remember, you can always rejoin us and create a new account!"
+  end
+
 end
 
 
@@ -196,27 +268,5 @@ end
 
 
 
-# when "pick cuisine"
-#         Restaurant.list_cuisines
-#         puts "\n\nPlease enter a cuisine.\n"
-#         choice = STDIN.gets.chomp
-#         choice = choice.downcase
-#         Restaurant.filter_cuisines(choice)
 
 
-
-
-
-
-  # def Restaurant.filter_cuisines(choice)
-  #   offers_my_choice = []
-  #   my_cheap_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id}
-  #   my_cheap_eats.each do |restaurant_option|
-  #     offers_the_cuisine = Restaurant.find(restaurant_option.restaurant_id) 
-  #     offers_my_choice << offers_the_cuisine
-  #   end
-  #   binding.pry
- 
-  #  \n > Pick Cuisine - Will let you filter for a particular cuisine.
-
-  # end
