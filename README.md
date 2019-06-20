@@ -1,6 +1,7 @@
 # Cheap Date
 
-Sort and save restaurants where Meals for Two are always under $30.
+#### Sort and save restaurants where Meals for Two are always under $30.
+
 ------
 
 ## Getting Started
