@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_19_235739) do
+ActiveRecord::Schema.define(version: 2019_06_20_163420) do
 
   create_table "lists", force: :cascade do |t|
     t.integer "user_id"
@@ -24,8 +24,6 @@ ActiveRecord::Schema.define(version: 2019_06_19_235739) do
     t.string "phone"
     t.string "menu"
     t.string "rating"
-    t.boolean "deliveryTF"
-    t.boolean "couponTF"
     t.string "cuisines"
   end
 

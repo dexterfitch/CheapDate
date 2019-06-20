@@ -148,34 +148,7 @@ class CommandLineInterface
     puts my_cuisine_choices.uniq
   end
 
-  def Restaurant.will_deliver
-    my_delivery_options = []
-    my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
-    my_available_restaurants.each do |restaurant_option|
-      delivers = Restaurant.find(restaurant_option.restaurant_id)
-      my_delivery_options << delivers
-    end
-    
-    my_delivery_options.each do |option|
-      if option.deliveryTF == true
-        puts "\n\nName: #{option.name}\nAddress: #{option.street_address}\nPhone Number: #{option.phone}\nMenu: #{option.menu}\nCuisines: #{option.cuisines}\nRating: #{option.rating} | Coupons: #{option.couponTF}"
-      end
-    end
-  end
 
-   def Restaurant.has_coupons
-    my_coupon_options = []
-    my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
-    my_available_restaurants.each do |restaurant_option|
-      coupons = Restaurant.find(restaurant_option.restaurant_id)
-      my_coupon_options << coupons
-    end
-    my_coupon_options.each do |option|
-      if option.couponTF == true
-        puts "\n\nName: #{option.name}\nAddress: #{option.street_address}\nPhone Number: #{option.phone}\nMenu: #{option.menu}\nCuisines: #{option.cuisines}\nRating: #{option.rating} | Delivery: #{option.deliveryTF}"
-      end
-    end
-  end
 
 end
 
