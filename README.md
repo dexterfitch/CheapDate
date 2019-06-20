@@ -9,7 +9,9 @@
 2. Navigate into the local repo via Terminal
 3. Run "bundle install" - if you don't have Bundler, run `gem install bundler` first
 4. Next, run `ruby bin/run.rb`
-5. Enjoy!
+5. Bone app the teeth!
+
+------
 
 ## User Concerns
 
@@ -17,6 +19,8 @@
 
 1. Users can enter and save their address in order to find nearby restaurants.
 2. Users can filter these results by cuisine, rating, delivery options, and coupons available.
+
+------
 
 ## APIs
 
