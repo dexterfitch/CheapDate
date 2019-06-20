@@ -1,18 +1,21 @@
 # Cheap Date
 
 Sort and save restaurants where Meals for Two are always under $30.
+======
+
+## Getting Started
+1. Clone this repo onto your computer locally
+2. Navigate into the local repo via Terminal
+3. Run "bundle install" - if you don't have Bundler, run `gem install bundler` first
+4. Next, run `ruby bin/run.rb`
+5. Enjoy!
 
 ## User Concerns
 
 ### Find Nearby Restaurants
 
-1. Users will be able to enter and save their address in order to find nearby restaurants.
-2. Users will be able to filter these results by distance, cuisine, delivery options, coupons available.
-
-### Save Favourite Restaurants
-
-1. Users can add restaurants they're interested in, or restaurants they like to a list.
-2. Users will be able to include personal notes about restaurants.
+1. Users can enter and save their address in order to find nearby restaurants.
+2. Users can filter these results by cuisine, rating, delivery options, and coupons available.
 
 ## APIs
 
