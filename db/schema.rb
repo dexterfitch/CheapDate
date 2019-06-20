@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_20_163420) do
+ActiveRecord::Schema.define(version: 2019_06_20_180131) do
 
   create_table "lists", force: :cascade do |t|
     t.integer "user_id"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_163420) do
     t.string "menu"
     t.string "rating"
     t.string "cuisines"
+    t.string "normalized_cuisines"
   end
 
   create_table "restaurants_users", force: :cascade do |t|

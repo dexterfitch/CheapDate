@@ -73,7 +73,7 @@ class CommandLineInterface
       restaurant_data << @@cheap_eats[i]["restaurant"]["user_rating"]["aggregate_rating"]
       restaurant_data << @@cheap_eats[i]["restaurant"]["cuisines"]
 
-      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], cuisines: restaurant_data[6])
+      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], cuisines: restaurant_data[6], normalized_cuisines: "")
 
       i+= 1
     end
@@ -136,87 +136,177 @@ class CommandLineInterface
     Restaurant.print_my_eats(sorted_eats)
   end
 
-  def Restaurant.gather_cuisines
-    cuisine_choices = []
+  def Restaurant.list_cuisines
+    Restaurant.normalize_cuisines
+    cuisine_choices = ""
     collected_eats = Restaurant.my_local_cheap_eats
     collected_eats.each do |cheap_eat|
-      cuisine_choices << cheap_eat.cuisines
+      cuisine_choices.concat(cheap_eat[:normalized_cuisines])
     end
-    cuisine_choices.uniq
+    unique_cuisine_choices = cuisine_choices.split(", ")
+    binding.pry
   end
 
-  def Restaurant.normalizew_cuisines
-    cuisine_types = [
-      "American",
-      "Asian Fusion",
-      "Bakery",
-      "BBQ",
-      "Bubble/Boba Tea",
-      "Burgers",
-      "Cafe",
-      "Chinese",
-      "Deli",
-      "Desserts",
-      "Dim Sum",
-      "Diner",
-      "Donuts",
-      "Drinks",
-      "Fast Food",
-      "Filipino",
-      "French",
-      "Frozen Yogurt",
-      "Greek",
-      "Hawaiian",
-      "Healthy",
-      "Ice Cream",
-      "Indian",
-      "Italian",
-      "Japanese",
-      "Korean",
-      "Latin American",
-      "Pakistani",
-      "Pizza",
-      "Pub",
-      "Mexican",
-      "Sandwiches",
-      "Seafood",
-      "Sushi",
-      "Tex-Mex",
-      "Thai",
-      "Vegetarian",
-      "Vietnamese"
-    ]
-    cuisine_choices = Restaurant.gather_cuisines
-    cuisine_choices
+  def Restaurant.normalize_cuisines
+    collected_eats = Restaurant.my_local_cheap_eats
+    collected_eats.each do |cheap_eat|
+      nca = ""
+      if cheap_eat[:cuisines].downcase.include? "american"
+        nca.concat("American, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "asian"
+        nca.concat("Asian Fusion, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "bakery"
+        nca.concat("Bakery, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "bbq" || cheap_eat[:cuisines].downcase.include? "barbeque" || cheap_eat[:cuisines].downcase.include? "bar-b-q" || cheap_eat[:cuisines].downcase.include? "barbecue" || cheap_eat[:cuisines].downcase.include? "b-b-q"
+        nca.concat("BBQ, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "bubble" || cheap_eat[:cuisines].downcase.include? "boba"
+        nca.concat("Bubble/Boba Tea, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "burger"
+        nca.concat("Burgers, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "cafe" || cheap_eat[:cuisines].downcase.include? "coffee" || cheap_eat[:cuisines].downcase.include? "tea"
+        nca.concat("Cafe, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "chinese"
+        nca.concat("Chinese, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "deli"
+        nca.concat("Deli, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "dessert"
+        nca.concat("Desserts, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "dim"
+        nca.concat("Dim Sum, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "diner"
+        nca.concat("Diner, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "donut"
+        nca.concat("Donuts, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "drink" || cheap_eat[:cuisines].downcase.include? "beverage" || cheap_eat[:cuisines].downcase.include? "juice"
+        nca.concat("Drinks, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "fast"
+        nca.concat("Fast Food, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "filipino"
+        nca.concat("Filipino, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "french"
+        nca.concat("French, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "frozen yo"
+        nca.concat("Frozen Yogurt, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "greek"
+        nca.concat("Greek, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "hawaiian"
+        nca.concat("Hawaiian, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "health"
+        nca.concat("Healthy, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "ice cream" || "gelato"
+        nca.concat("Ice Cream, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "indian"
+        nca.concat("Indian, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "italian"
+        nca.concat("Italian, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "japanese"
+        nca.concat("Japanese, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "korean"
+        nca.concat("Korean, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "latin"
+        nca.concat("Latin American, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "pakistan"
+        nca.concat("Pakistani, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "pho"
+        nca.concat("Pho, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "pizza"
+        nca.concat("Pizza, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "pub" || "bar"
+        nca.concat("Pub, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "mexican"
+        nca.concat("Mexican, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "sandwich" || "sub" || "wrap"
+        nca.concat("Sandwiches, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "seafood"
+        nca.concat("Seafood, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "sushi" || "sashimi"
+        nca.concat("Sushi, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "tex"
+        nca.concat("Tex-Mex, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "thai"
+        nca.concat("Thai, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "vegetarian" || "vegan" || "salad"
+        nca.concat("Vegetarian, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "vietnamese"
+        nca.concat("Vietnamese, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+    end
+  end
 end
-
-
-
-
-
-
-
-# when "pick cuisine"
-#         Restaurant.list_cuisines
-#         puts "\n\nPlease enter a cuisine.\n"
-#         choice = STDIN.gets.chomp
-#         choice = choice.downcase
-#         Restaurant.filter_cuisines(choice)
-
-
-
-
-
-
-  # def Restaurant.filter_cuisines(choice)
-  #   offers_my_choice = []
-  #   my_cheap_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id}
-  #   my_cheap_eats.each do |restaurant_option|
-  #     offers_the_cuisine = Restaurant.find(restaurant_option.restaurant_id) 
-  #     offers_my_choice << offers_the_cuisine
-  #   end
-  #   binding.pry
- 
-  #  \n > Pick Cuisine - Will let you filter for a particular cuisine.
-
-  # end
