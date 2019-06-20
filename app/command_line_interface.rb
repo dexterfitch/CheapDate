@@ -6,8 +6,29 @@ require_relative 'user'
 class CommandLineInterface
 
   def find_a_cheap_date
-    puts "\n\n\nWelcome to CheapDate, where we specialize in finding cheap eats for two!"
-    puts "Let's get your account set up.\n\n\n"
+    puts "\n\n\nWelcome to CheapDate, where we specialize in finding cheap eats for two!\n\n"
+    #puts "Let's get your account set up.\n\n\n"
+  end
+
+  def existing_user
+    puts "Do you have an account already? (y/n)"
+      answer = STDIN.gets.chomp
+      answer = answer.downcase
+      case answer
+      when "y"
+        puts "What is your username?"
+        answer = STDIN.gets.chomp
+          $current_user = User.find_by(username: answer)
+          puts "Welcome back, #{$current_user.username}"
+          Restaurant.cheap_eats
+      when "n"
+        puts "Let's set up your account!\n\n\n"
+        User.create_user
+        Restaurant.pull_restaurant_json
+        Restaurant.get_restaurant
+        Restaurant.join_users
+        Restaurant.cheap_eats
+      end
   end
 
   def User.get_lat(json_data)
@@ -205,10 +226,8 @@ class CommandLineInterface
       case answer
       when "name"
         User.edit_name
-        Restaurant.cheap_eats
       when "address"
         User.edit_address
-        Restaurant.cheap_eats
       when "delete"
         User.delete_account
       when "help"
