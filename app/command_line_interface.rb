@@ -77,8 +77,9 @@ class CommandLineInterface
         restaurant_data << true
       end
       restaurant_data << @@cheap_eats[i]["restaurant"]["include_bogo_offers"]
+      restaurant_data << @@cheap_eats[i]["restaurant"]["cuisines"]
 
-      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], deliveryTF: restaurant_data[6], couponTF: restaurant_data[7])
+      Restaurant.create(name: restaurant_data[0], street_address: restaurant_data[1], city: restaurant_data[2], phone: restaurant_data[3], menu: restaurant_data[4], rating: restaurant_data[5], deliveryTF: restaurant_data[6], couponTF: restaurant_data[7], cuisines: restaurant_data[8])
 
       i+= 1
     end
@@ -98,10 +99,18 @@ class CommandLineInterface
       case answer
       when "list"
         Restaurant.list_your_eats
+      when "cuisine"
+        Restaurant.list_cuisines
+      when "delivery"
+        Restaurant.will_deliver
+      when "coupons"
+        Restaurant.has_coupons
+      when "name sort"
+        Restaurant.sort_your_eats_by_name
       when "help"
-        puts "Commands:\n > List - Will list all your local Cheap Eats.\n > Exit - Close the app"
+        puts "Commands:\n > List - Will list all your local Cheap Eats.\n > Cuisine - Will list available cuisines.\n > Name Sort - Will sort your list by name.\n > Delivery - Will list all restaurants offering delivery.\n > Coupons - Will list all restaurants with special offers.\n > Exit - Close the app."
       when "exit"
-        puts "bye!"
+        puts "Bye!"
         break
       end
     end
@@ -111,8 +120,92 @@ class CommandLineInterface
     my_cheap_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
     my_cheap_eats.each do |cheap_eat|
       this_eat = Restaurant.find(cheap_eat.restaurant_id)
-      puts "\n\nName: #{this_eat.name}\nAddress: #{this_eat.street_address}\nPhone Number: #{this_eat.phone}\nMenu: #{this_eat.menu}\nRating: #{this_eat.rating} | Delivery: #{this_eat.deliveryTF} | Coupons: #{this_eat.couponTF}"
+      puts "\n\nName: #{this_eat.name}\nAddress: #{this_eat.street_address}\nPhone Number: #{this_eat.phone}\nMenu: #{this_eat.menu}\nCuisines: #{this_eat.cuisines}\nRating: #{this_eat.rating} | Delivery: #{this_eat.deliveryTF} | Coupons: #{this_eat.couponTF}"
+    end
+  end
+
+  def Restaurant.sort_your_eats_by_name
+    presorted_eats = []
+    sorted_eats = []
+    my_eats = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
+    my_eats.each do |eat|
+      eat = Restaurant.find(eat.restaurant_id)
+      presorted_eats << eat
+    end
+    sorted_eats = presorted_eats.sort_by { |k| k[:name].downcase }
+    sorted_eats.each do |this_eat|
+      puts "\n\nName: #{this_eat.name}\nAddress: #{this_eat.street_address}\nPhone Number: #{this_eat.phone}\nMenu: #{this_eat.menu}\nCuisines: #{this_eat.cuisines}\nRating: #{this_eat.rating} | Delivery: #{this_eat.deliveryTF} | Coupons: #{this_eat.couponTF}"
+    end
+  end
+
+  def Restaurant.list_cuisines
+    my_cuisine_choices = []
+    my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
+    my_available_restaurants.each do |restaurant_option|
+      this_cuisine_choice = Restaurant.find(restaurant_option.restaurant_id)
+      my_cuisine_choices << this_cuisine_choice.cuisines
+    end
+    puts my_cuisine_choices.uniq
+  end
+
+  def Restaurant.will_deliver
+    my_delivery_options = []
+    my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
+    my_available_restaurants.each do |restaurant_option|
+      delivers = Restaurant.find(restaurant_option.restaurant_id)
+      my_delivery_options << delivers
+    end
+    
+    my_delivery_options.each do |option|
+      if option.deliveryTF == true
+        puts "\n\nName: #{option.name}\nAddress: #{option.street_address}\nPhone Number: #{option.phone}\nMenu: #{option.menu}\nCuisines: #{option.cuisines}\nRating: #{option.rating} | Coupons: #{option.couponTF}"
+      end
+    end
+  end
+
+   def Restaurant.has_coupons
+    my_coupon_options = []
+    my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id }
+    my_available_restaurants.each do |restaurant_option|
+      coupons = Restaurant.find(restaurant_option.restaurant_id)
+      my_coupon_options << coupons
+    end
+    my_coupon_options.each do |option|
+      if option.couponTF == true
+        puts "\n\nName: #{option.name}\nAddress: #{option.street_address}\nPhone Number: #{option.phone}\nMenu: #{option.menu}\nCuisines: #{option.cuisines}\nRating: #{option.rating} | Delivery: #{option.deliveryTF}"
+      end
     end
   end
 
 end
+
+
+
+
+
+
+
+# when "pick cuisine"
+#         Restaurant.list_cuisines
+#         puts "\n\nPlease enter a cuisine.\n"
+#         choice = STDIN.gets.chomp
+#         choice = choice.downcase
+#         Restaurant.filter_cuisines(choice)
+
+
+
+
+
+
+  # def Restaurant.filter_cuisines(choice)
+  #   offers_my_choice = []
+  #   my_available_restaurants = RestaurantsUser.select { |ru| ru.user_id == $current_user.id}
+  #   my_available_restaurants.each do |restaurant_option|
+  #     offers_the_cuisine = Restaurant.find(restaurant_option.restaurant_id) 
+  #     offers_my_choice << offers_the_cuisine
+  #   end
+  #   binding.pry
+ 
+  #  \n > Pick Cuisine - Will let you filter for a particular cuisine.
+
+  # end
