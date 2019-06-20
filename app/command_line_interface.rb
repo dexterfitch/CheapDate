@@ -7,15 +7,31 @@ class CommandLineInterface
 
   def find_a_cheap_date
     puts "\n\n\nWelcome to CheapDate, where we specialize in finding cheap eats for two!"
-    puts "Let's get your account set up.\n\n\n"
   end
 
-  def User.get_lat(json_data)
-    @lat = json_data['latt']
-  end
+  # USER METHODS
 
-  def User.get_long(json_data)
-    @long = json_data['longt']
+  def existing_user
+    puts "Do you have an account already? (y/n)"
+    answer = STDIN.gets.chomp
+    answer = answer.downcase
+    case answer
+    when "y"
+      puts "What is your username?"
+      answer = STDIN.gets.chomp
+        $current_user = User.find_by(username: answer)
+        puts "Welcome back, #{$current_user.username}"
+        puts "\n\n\nCollecting your nearby restaurants...\n\n\n"
+        Restaurant.cheap_eats
+    when "n"
+      puts "Let's set up your account!\n\n\n"
+      User.create_user
+      puts "\n\n\nCollecting your nearby restaurants...\n\n\n"
+      Restaurant.pull_restaurant_json
+      Restaurant.get_restaurant
+      Restaurant.join_users
+      Restaurant.cheap_eats
+    end
   end
 
   def User.create_user
@@ -43,6 +59,72 @@ class CommandLineInterface
     
     $current_user.save
   end
+
+  def User.access_account
+    puts "What would you like to do? (type Help for a list of possible commands)"
+    answer = STDIN.gets.chomp
+    answer = answer.downcase
+    case answer
+    when "name"
+      User.edit_name
+    when "address"
+      User.edit_address
+    when "delete"
+      User.delete_account
+    when "help"
+      puts "Commands:\n > Name - Edit your name.\n > Address - Edit your address.\n > Delete - Delete your CheapDate account.\n > Return - Back to the Main Menu."
+    end
+  end
+
+  def User.edit_name
+    puts "The address currently associated with you account is:\n #{$current_user.name}.\n Would you like to change it? (y/n)"
+    answer = STDIN.gets.chomp
+    answer = answer.downcase
+    case answer
+    when "y"
+      puts "Please type the name you would like associated with your account."
+      answer = STDIN.gets.chomp
+      $current_user.update(name: answer)
+      puts "\nThank you. Your name has been successfully updated to: #{$current_user.name}\n\n\n\n"
+    when "n"
+      Restaurant.cheap_eats
+    end
+  end
+
+  def User.edit_address
+    puts "The address currently associated with you account is:\n #{$current_user.street}, #{$current_user.city}.\n Would you like to change it? (y/n)"
+    answer = STDIN.gets.chomp
+    answer = answer.downcase
+    case answer
+    when "y" 
+      puts "Please enter the street address you'd like to associate with your account: "
+      answer = STDIN.gets.chomp
+      $current_user.update(street: answer)
+      puts "Please enter the city you'd like to associate with your account:"
+      answer = STDIN.gets.chomp
+      $current_user.update(city: answer)
+      puts "Thank you, your account has been updated. Your address is:\n #{$current_user.street}, #{$current_user.city}"
+    when "n"
+      Restaurant.cheap_eats
+    end
+  end
+
+  def User.delete_account
+    puts "Please enter your username to delete your account."
+    answer = STDIN.gets.chomp
+    User.where(:username => answer).destroy_all
+    puts "We're sorry to see you go. Remember, you can always rejoin us and create a new account!"
+  end
+
+  def User.get_lat(json_data)
+    @lat = json_data['latt']
+  end
+
+  def User.get_long(json_data)
+    @long = json_data['longt']
+  end
+
+  # RESTAURANT METHODS
 
   def Restaurant.pull_restaurant_json
     start = 0
@@ -317,5 +399,4 @@ class CommandLineInterface
       end
     end
   end
-
 end
