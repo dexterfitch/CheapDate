@@ -176,7 +176,7 @@ class CommandLineInterface
 
   def Restaurant.join_users
     Restaurant.all.each { |cheap_eat|
-      RestaurantsUser.create(user_id: $current_user.id, restaurant_id: cheap_eat.id)
+      RestaurantsUser.first_or_create(user_id: $current_user.id, restaurant_id: cheap_eat.id)
     }
   end
 
