@@ -176,13 +176,13 @@ class CommandLineInterface
 
   def Restaurant.join_users
     Restaurant.all.each { |cheap_eat|
-      RestaurantsUser.create(user_id: $current_user.id, restaurant_id: cheap_eat.id)
+      RestaurantsUser.first_or_create(user_id: $current_user.id, restaurant_id: cheap_eat.id)
     }
   end
 
   def Restaurant.cheap_eats
     while true
-      puts "What would you like to do now?\n(Options: List, Cuisine, Sort, Account, Exit, Help)"
+      puts "What would you like to do now?\n(Options: List, Cuisine, Sort, Stars, Account, Exit, Help)"
       answer = STDIN.gets.chomp
       answer = answer.downcase
       case answer
@@ -192,12 +192,14 @@ class CommandLineInterface
         Restaurant.list_cuisines
       when "sort"
         Restaurant.sort_my_eats_by_name
+      when "stars"
+        Restaurant.sort_my_eats_by_rating
       when "account"
         User.access_account
       when "help"
-        puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list & filter available cuisines. \n > Sort - Will sort your list by name. \n > Account - Edit your account information.\n > Exit - Close the app."
+        puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list & filter available cuisines. \n > Sort - Will sort your list by name. \n > Stars - Will filter your list by star rating. \n > Account - Edit your account information.\n > Exit - Close the app."
       when "exit"
-        puts "\n\nBye! Bon appetit!\n\n"
+        puts "\n\nBye! Bon appetit!  😋\n\n"
         exit
       end
     end
@@ -230,6 +232,14 @@ class CommandLineInterface
   def Restaurant.sort_my_eats_by_name
     collected_eats = Restaurant.my_local_cheap_eats
     sorted_eats = collected_eats.sort_by { |k| k[:name].downcase }
+    Restaurant.print_my_eats(sorted_eats)
+  end
+
+  def Restaurant.sort_my_eats_by_rating
+    collected_eats = Restaurant.my_local_cheap_eats
+    puts "Show me restaurants with ratings of at least __ stars. (Enter 1-5)"
+    min_rating = STDIN.gets.chomp
+    sorted_eats = collected_eats.select { |eat| eat[:rating] >= min_rating }
     Restaurant.print_my_eats(sorted_eats)
   end
 
