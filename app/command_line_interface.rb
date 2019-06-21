@@ -199,7 +199,7 @@ class CommandLineInterface
       when "help"
         puts "Commands:\n > List - Will list all your local Cheap Eats. \n > Cuisine - Will list & filter available cuisines. \n > Sort - Will sort your list by name. \n > Stars - Will filter your list by star rating. \n > Account - Edit your account information.\n > Exit - Close the app."
       when "exit"
-        puts "\n\nBye! Bon appetit!\n\n"
+        puts "\n\nBye! Bon appetit!  😋\n\n"
         exit
       end
     end
