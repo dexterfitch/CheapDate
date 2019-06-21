@@ -9,7 +9,7 @@
 ### Find Nearby Restaurants
 
 1. Users can enter and save their address in order to find nearby restaurants.
-2. Users can filter these results by cuisine, rating, delivery options, and coupons available.
+2. Users can filter these results by cuisine or rating.
 
 ------
 
