@@ -240,6 +240,9 @@ class CommandLineInterface
     puts "Show me restaurants with ratings of at least __ stars. (Enter 1-5)"
     min_rating = STDIN.gets.chomp
     sorted_eats = collected_eats.select { |eat| eat[:rating] >= min_rating }
+    if sorted_eats.length == 0
+      puts "\n\nNo restaurants meet your rating criteria - try again!\n\n"
+    end
     Restaurant.print_my_eats(sorted_eats)
   end
 
