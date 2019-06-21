@@ -13,8 +13,9 @@
 
 ### Find Nearby Restaurants
 
-1. Users can enter and save their address in order to find nearby restaurants.
+1. Users can enter, save and update their address in order to find nearby restaurants.
 2. Users can filter these results by cuisine or rating.
+3. Users can delete their account
 
 ------
 
