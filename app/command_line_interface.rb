@@ -286,11 +286,15 @@ class CommandLineInterface
         nca.concat("Chinese, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
+      if cheap_eat[:cuisines].downcase.include? "columbi"
+        nca.concat("Colombian, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
       if cheap_eat[:cuisines].downcase.include? "deli"
         nca.concat("Deli, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "dessert"
+      if (cheap_eat[:cuisines].downcase.include? "dessert") || (cheap_eat[:cuisines].downcase.include? "crepe")
         nca.concat("Desserts, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
@@ -322,8 +326,16 @@ class CommandLineInterface
         nca.concat("French, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
-      if cheap_eat[:cuisines].downcase.include? "frozen yo"
+      if (cheap_eat[:cuisines].downcase.include? "frozen yo") || (cheap_eat[:cuisines].downcase.include? "froyo") || (cheap_eat[:cuisines].downcase.include? "fro yo") || (cheap_eat[:cuisines].downcase.include? "fro-yo")
         nca.concat("Frozen Yogurt, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "fusion"
+        nca.concat("Fusion, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "german"
+        nca.concat("German, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
       if cheap_eat[:cuisines].downcase.include? "greek"
@@ -346,6 +358,10 @@ class CommandLineInterface
         nca.concat("Indian, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
+      if cheap_eat[:cuisines].downcase.include? "israel"
+        nca.concat("Israeli, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
       if cheap_eat[:cuisines].downcase.include? "italian"
         nca.concat("Italian, ")
         cheap_eat.update(normalized_cuisines: nca)
@@ -362,8 +378,16 @@ class CommandLineInterface
         nca.concat("Latin American, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
+      if cheap_eat[:cuisines].downcase.include? "medit"
+        nca.concat("Mediterranean, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
       if cheap_eat[:cuisines].downcase.include? "pakistan"
         nca.concat("Pakistani, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "peru"
+        nca.concat("Peruvian, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
       if cheap_eat[:cuisines].downcase.include? "pho"
@@ -392,6 +416,10 @@ class CommandLineInterface
       end
       if (cheap_eat[:cuisines].downcase.include? "sushi") || (cheap_eat[:cuisines].downcase.include? "sashimi")
         nca.concat("Sushi, ")
+        cheap_eat.update(normalized_cuisines: nca)
+      end
+      if cheap_eat[:cuisines].downcase.include? "taco"
+        nca.concat("Taco, ")
         cheap_eat.update(normalized_cuisines: nca)
       end
       if cheap_eat[:cuisines].downcase.include? "tex"
