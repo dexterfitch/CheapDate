@@ -4,6 +4,10 @@
 
 ------
 
+[![Cheap Date Demo Video](https://img.youtube.com/vi/4JDs-1PO1qs/0.jpg)](https://www.youtube.com/watch?v=4JDs-1PO1qs)
+
+------
+
 ## User Concerns
 
 ### Find Nearby Restaurants
