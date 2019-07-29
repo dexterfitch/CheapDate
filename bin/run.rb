@@ -1,3 +1,4 @@
+#!/usr/local/bin/ruby
 require_relative '../config/environment'
 
 lets_go = CommandLineInterface.new
