@@ -33,3 +33,8 @@
 
 1. [Zomato](https://developers.zomato.com/documentation)
 2. [Geocode.xyz](https://geocode.xyz/api)
+
+------
+
+## License
+[Creative Commons](https://github.com/dexterfitch/CheapDate/blob/master/LICENSE)
